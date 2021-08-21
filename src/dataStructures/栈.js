@@ -4,7 +4,7 @@
  * 比如一摞书或一碟盘子
  */
 
-class Stack {
+export class Stack {
     constructor() {
         this.count = 0;
         this.items = {};
@@ -62,8 +62,7 @@ function decimalToBinary(decNumber) {
     let binaryString = '';
     while (number > 0) {
         rem = Math.floor(number % 2);
-        remStack.push(rem); // {3}
-        console.log(number);
+        remStack.push(rem);
         number = Math.floor(number / 2);
     }
     while (!remStack.isEmpty()) {
@@ -72,3 +71,27 @@ function decimalToBinary(decNumber) {
     return binaryString;
 }
 console.log(decimalToBinary(13450)); 11010010001010
+
+
+// 为了确保属性的私有性 可以使用WeakMap
+
+const items = new WeakMap(); // {1}
+class Stack1 {
+    constructor() {
+        items.set(this, []); // {2}
+    }
+    push(element) {
+        const s = items.get(this); // {3}
+        s.push(element);
+    }
+    pop() {
+        const s = items.get(this);
+        const r = s.pop();
+        return r;
+    }
+    // 其他方法
+}
+
+const stack1 = new Stack1();
+stack1.push(20);
+console.log(stack1);
