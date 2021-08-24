@@ -50,7 +50,7 @@ export class LinkedList {
     getElementAt(index) { // 返回链表中特定位置的元素。如果链表中不存在这样的元素，则返回undefined
         if (index >= 0 && index <= this.count) {
             let node = this.head;
-            for (var i = 0;i < index && node != null;i++) {
+            for (var i = 0; i < index && node != null; i++) {
                 node = node.next;
             }
             return node;
@@ -63,7 +63,7 @@ export class LinkedList {
     }
     indexOf(element) { // 返回元素在链表中的索引。如果链表中没有该元素则返回-1
         let current = this.head;
-        for(let i = 0;i < this.count;i++) {
+        for (let i = 0; i < this.count; i++) {
             if (this.equalsFn(element, current.element)) {
                 return i;
             }
@@ -98,7 +98,7 @@ export class LinkedList {
         }
         let objString = `${this.head.element}`;
         let current = this.head;
-        for (let i = 0;i < this.size() && current != null;i++) {
+        for (let i = 0; i < this.size() && current != null; i++) {
             objString += `${objString},${current.element}`;
             current = current.next;
         }
@@ -116,3 +116,132 @@ list.push(15);
 console.log(list.getElementAt(3));
 console.log(list.indexOf(15));
 console.log(list.getHead());
+
+
+// 双向链表
+class DoublyNode extends Node {
+    constructor(element, next, prev) {
+        super(element, next);
+        this.prev = prev;
+    }
+}
+class DoublyLinkedList extends LinkedList {
+    constructor(equalsFn = defaultEquals) {
+        super(equalsFn);
+        this.tail = undefined;
+    }
+    insert(element, index) {
+        if (index >= 0 && index <= this.count) {
+            const node = new DoublyNode(element);
+            let current = this.head;
+            if (index === 0) {
+                if (this.head == null) {
+                    this.head = node;
+                    this.tail = node;
+                } else {
+                    node.next = this.head;
+                    current.prev = node;
+                    this.head = node;
+                }
+            } else if (index === this.count) {
+                current = this.tail;
+                current.next = node;
+                node.prev = current;
+                this.tail = node;
+            } else {
+                const previous = this.getElementAt(index - 1);
+                current = previous.next;
+                node.next = current;
+                previous.next = node;
+                current.prev = node;
+                node.prev = previous;
+            }
+            this.count++;
+            return true;
+        }
+        return false;
+    }
+    removeAt(index) {
+        if (index >= 0 && index < this.count) {
+            let current = this.head;
+            if (index === 0) {
+                this.head = current.next;
+                // 如果只有一项，更新 tail
+                if (this.count === 1) {
+                    this.tail = undefined;
+                } else {
+                    this.head.prev = undefined;
+                }
+            } else if (index === this.count - 1) { // 最后一项
+                current = this.tail;
+                this.tail = current.prev;
+                this.tail.next = undefined;
+            } else {
+                current = this.getElementAt(index);
+                const previous = current.prev;
+                // 将 previous 与 current 的下一项链接起来——跳过 current
+                previous.next = current.next;
+                current.next.prev = previous;
+            }
+            this.count--;
+            return current.element;
+        }
+        return undefined;
+    }
+}
+
+// 循环链表
+class CircularLinkedList extends LinkedList {
+    constructor(equalsFn = defaultEquals) {
+        super(equalsFn);
+    }
+    insert(element, index) {
+        if (index >= 0 && index <= this.count) {
+            const node = new Node(element);
+            let current = this.head;
+            if (index === 0) {
+                if (this.head == null) {
+                    this.head = node;
+                    node.next = this.head;
+                } else {
+                    node.next = current;
+                    current = this.getElementAt(this.size());
+                    // 更新最后一个元素
+                    this.head = node;
+                    current.next = this.head;
+                }
+            } else { // 这种场景没有变化
+                const previous = this.getElementAt(index - 1);
+                node.next = previous.next;
+                previous.next = node;
+            }
+            this.count++;
+            return true;
+        }
+        return false;
+    }
+    removeAt(index) {
+        if (index >= 0 && index < this.count) {
+            let current = this.head;
+            if (index === 0) {
+                if (this.size() === 1) {
+                    this.head = undefined;
+                } else {
+                    const removed = this.head;
+                    current = this.getElementAt(this.size());
+                    this.head = this.head.next;
+                    current.next = this.head;
+                    current = removed;
+                }
+            } else {
+                // 不需要修改循环链表最后一个元素
+                const previous = this.getElementAt(index - 1);
+                current = previous.next;
+                previous.next = current.next;
+            }
+            this.count--;
+            return current.element;
+        }
+        return undefined;
+    }
+}
