@@ -25,14 +25,11 @@ const Compare = {
     BIGGER_THAN: 1
 }
 
-function defaultCompare(key, compareKey) {
-    if (key > compareKey) {
-        return Compare.BIGGER_THAN;
-    } else if (key < compareKey) {
-        return Compare.LESS_THAN;
-    } else {
+function defaultCompare(a, b) {
+    if (a === b) {
         return 0;
     }
+    return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
 }
 
 export default class BinarySearchTree {
