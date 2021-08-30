@@ -21,7 +21,7 @@ class ValuePair {
 
 // Map 字典
 
-class Dictionary {
+export class Dictionary {
     constructor(toStrFn = defaultToString) {
         this.toStrFn = toStrFn;
         this.table = {};
