@@ -72,3 +72,59 @@ graph.addEdge('B', 'F');
 graph.addEdge('E', 'I');
 
 console.log(graph.toString());
+
+// 图的遍历
+/**
+ * 广度优先搜索 BFS  -》 队列  按层访问顶点
+ * 
+ * 深度优先搜索 DFS  -》 栈
+ */
+
+/**
+ * 白色：表示该顶点还没有被访问。
+ * 灰色：表示该顶点被访问过，但并未被探索过。
+ * 黑色：表示该顶点被访问过且被完全探索过。
+ */
+const Colors = {
+    WHITE: 0,
+    GREY: 1,
+    BLACK: 2
+};
+
+const initializeColor = vertices => {
+    const color = {};
+    for (let i = 0; i < vertices.length; i++) {
+        color[vertices[i]] = Colors.WHITE;
+    }
+    return color;
+};
+
+// 广度优先搜索
+import { Queue } from './队列.js';
+
+export const breadthFirstSearch = (graph, startVertex, callback) => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    const queue = new Queue();
+    queue.enqueue(startVertex);
+    while (!queue.isEmpty()) {
+        const u = queue.dequeue();
+        const neighbors = adjList.get(u);
+        color[u] = Colors.GREY;
+        for (let i = 0; i < neighbors.length; i++) {
+            const w = neighbors[i];
+            if (color[w] === Colors.WHITE) {
+                color[w] = Colors.GREY;
+                queue.enqueue(w);
+            }
+        }
+        color[u] = Colors.BLACK;
+        if (callback) {
+            callback(u);
+        }
+    }
+};
+
+const printVertex = (value) => console.log('Visited vertex: ' + value); // {15}
+breadthFirstSearch(graph, myVertices[0], printVertex);
