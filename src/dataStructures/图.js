@@ -105,7 +105,7 @@ import { Queue } from './队列.js';
 export const breadthFirstSearch = (graph, startVertex, callback) => {
     const vertices = graph.getVertices();
     const adjList = graph.getAdjList();
-    const color = initializeColor(vertices);
+    const color = initializeColor(vertices); // 初始化为白色，代表还没被访问
     const queue = new Queue();
     queue.enqueue(startVertex);
     while (!queue.isEmpty()) {
@@ -115,16 +115,16 @@ export const breadthFirstSearch = (graph, startVertex, callback) => {
         for (let i = 0; i < neighbors.length; i++) {
             const w = neighbors[i];
             if (color[w] === Colors.WHITE) {
-                color[w] = Colors.GREY;
+                color[w] = Colors.GREY; // 内部的顶点如果是白色，改为灰色，表示被访问过
                 queue.enqueue(w);
             }
         }
-        color[u] = Colors.BLACK;
+        color[u] = Colors.BLACK; // 遍历完一个顶点的相邻顶点后，表示这个顶点已经被探索完
         if (callback) {
             callback(u);
         }
     }
 };
 
-const printVertex = (value) => console.log('Visited vertex: ' + value); // {15}
+const printVertex = (value) => console.log('Visited vertex: ' + value);
 breadthFirstSearch(graph, myVertices[0], printVertex);
