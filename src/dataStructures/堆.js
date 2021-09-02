@@ -19,9 +19,9 @@ function defaultCompare(a, b) {
 }
 
 function swap(array, a, b) {
-    const temp = array[a]; // {5}
-    array[a] = array[b]; // {6}
-    array[b] = temp; // {7}
+    const temp = array[a];
+    array[a] = array[b];
+    array[b] = temp;
 }
 
 // 最小堆
