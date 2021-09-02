@@ -128,3 +128,42 @@ export const breadthFirstSearch = (graph, startVertex, callback) => {
 
 const printVertex = (value) => console.log('Visited vertex: ' + value);
 breadthFirstSearch(graph, myVertices[0], printVertex);
+
+
+const BFS = (graph, startVertex) => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    const queue = new Queue();
+    const distances = {}; // 距离
+    const predecessors = {}; // 前溯点
+    queue.enqueue(startVertex);
+    for (let i = 0; i < vertices.length; i++) { // 初始化 距离和前溯点对象
+        distances[vertices[i]] = 0;
+        predecessors[vertices[i]] = null;
+    }
+    while (!queue.isEmpty()) {
+        const u = queue.dequeue();
+        const neighbors = adjList.get(u);
+        console.log(u, neighbors);
+        color[u] = Colors.GREY;
+        for (let i = 0; i < neighbors.length; i++) {
+            const w = neighbors[i];
+            if (color[w] === Colors.WHITE) {
+                color[w] = Colors.GREY;
+                distances[w] = distances[u] + 1;
+                predecessors[w] = u;
+                console.log(w, '==');
+                queue.enqueue(w);
+            }
+        }
+        color[u] = Colors.BLACK;
+    }
+    return {
+        distances,
+        predecessors
+    };
+};
+
+const shortestPathA = BFS(graph, myVertices[0]);
+console.log(shortestPathA);
