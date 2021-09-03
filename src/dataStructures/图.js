@@ -71,8 +71,6 @@ graph.addEdge('B', 'E');
 graph.addEdge('B', 'F');
 graph.addEdge('E', 'I');
 
-console.log(graph.toString());
-
 // 图的遍历
 /**
  * 广度优先搜索 BFS  -》 队列  按层访问顶点
@@ -145,7 +143,6 @@ const BFS = (graph, startVertex) => {
     while (!queue.isEmpty()) {
         const u = queue.dequeue();
         const neighbors = adjList.get(u);
-        console.log(u, neighbors);
         color[u] = Colors.GREY;
         for (let i = 0; i < neighbors.length; i++) {
             const w = neighbors[i];
@@ -153,7 +150,6 @@ const BFS = (graph, startVertex) => {
                 color[w] = Colors.GREY;
                 distances[w] = distances[u] + 1;
                 predecessors[w] = u;
-                console.log(w, '==');
                 queue.enqueue(w);
             }
         }
@@ -167,3 +163,85 @@ const BFS = (graph, startVertex) => {
 
 const shortestPathA = BFS(graph, myVertices[0]);
 console.log(shortestPathA);
+
+
+// 深度优先搜索
+const depthFirstSearch = (graph, callback) => {
+    const vertices = graph.getVertices(); // 顶点
+    const adjList = graph.getAdjList(); // 相邻边
+    const color = initializeColor(vertices); // 初始化顶点
+    for (let i = 0; i < vertices.length; i++) {
+        if (color[vertices[i]] === Colors.WHITE) {
+            depthFirstSearchVisit(vertices[i], color, adjList, callback);
+        }
+    }
+};
+const depthFirstSearchVisit = (u, color, adjList, callback) => {
+    color[u] = Colors.GREY; // 顶点置为灰色
+    if (callback) {
+        callback(u);
+    }
+    const neighbors = adjList.get(u); // 获取顶点的相邻顶点
+    for (let i = 0; i < neighbors.length; i++) {
+        const w = neighbors[i];
+        if (color[w] === Colors.WHITE) {
+            depthFirstSearchVisit(w, color, adjList, callback);
+        }
+    }
+    color[u] = Colors.BLACK;
+};
+
+depthFirstSearch(graph, printVertex);
+
+export const DFS = graph => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    const d = {};
+    const f = {};
+    const p = {};
+    const time = { count: 0 }; // 追踪发现时间和探索时间
+    for (let i = 0; i < vertices.length; i++) {
+        f[vertices[i]] = 0;
+        d[vertices[i]] = 0;
+        p[vertices[i]] = null;
+    }
+    for (let i = 0; i < vertices.length; i++) {
+        if (color[vertices[i]] === Colors.WHITE) {
+            DFSVisit(vertices[i], color, d, f, p, time, adjList);
+        }
+    }
+    return {
+        discovery: d,
+        finished: f,
+        predecessors: p
+    };
+};
+const DFSVisit = (u, color, d, f, p, time, adjList) => {
+    color[u] = Colors.GREY;
+    d[u] = ++time.count;
+    const neighbors = adjList.get(u);
+    for (let i = 0; i < neighbors.length; i++) {
+        const w = neighbors[i];
+        if (color[w] === Colors.WHITE) {
+            p[w] = u;
+            DFSVisit(w, color, d, f, p, time, adjList);
+        }
+    }
+    color[u] = Colors.BLACK;
+    f[u] = ++time.count;
+};
+
+const result = DFS(graph);
+console.log(JSON.stringify(result));
+/**
+ * {
+ * "discovery":{"A":1,"B":2,"C":10,"D":11,"E":3,"F":7,"G":12,"H":14,"I":4},
+ * "finished":{"A":18,"B":9,"C":17,"D":16,"E":6,"F":8,"G":13,"H":15,"I":5},
+ * "predecessors":{"A":null,"B":"A","C":"A","D":"C","E":"B","F":"B","G":"D","H":"D","I":"E"}
+ * }
+ */
+
+
+
+// Dijkstra 算法是一种计算从单个源到所有其他源的最短路径的贪心算法
