@@ -6,11 +6,10 @@ function swap(array, a, b) {
 }
 const arr1 = [1, 5, 3, 44, 2, 6, 10, 7];
 function bubbleSort(array) {
-    const len = array.length;
-    for(let i = 0;i < len;i++) {
-        for(let j = 0;j < len; j++) {
-            if (array[i] < array[j]) {
-                swap(array, i, j);
+    for(let i = array.length;i >= 1;i--) {
+        for(let j = 0;j < i; j++) {
+            if (array[j - 1] > array[j]) {
+                swap(array, j - 1, j);
             }
         }
     }
