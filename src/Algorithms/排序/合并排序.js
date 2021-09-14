@@ -32,6 +32,43 @@ function merge_sort(A, p, r) {
     merge(A, p, q, r);
 }
 
+// 用循环代替递归
+// 减少递归，但是增加了计算
+// 合理的拆分很重要
+function merge_sort1(A) {
+    for (let i = 0; i < A.length; i++) {
+        const step = i * 2;
+        for (let start = 0; start < A.length; start += step) {
+            const end = Math.main(start + step , A.length);
+            if (end - start > 1) {
+                const mid = start + i;
+                merge(A, start, mid. end);
+            }
+        }
+    }
+}
+
+function floor_power_of2(len) {
+    let _index = 1;
+    while (Math.pow(2, _index + 1) < len) {
+        _index++;
+    }
+    return Math.pow(2, _index);
+}
+
+function merge_sort2(A) {
+    const p2 = floor_power_of2(A.length);
+    const scale = A.length / p2;
+    for (let i = 1;i < p2; i++) {
+        for (let m = 0; m < p2; m += i * 2) {
+            const start = Math.floor(m * scale);
+            const mid = Math.floor((m + i) * scale);
+            const end = Math.floor((m + i * 2) * scale);
+            merge(A, start, mid. end);
+        }
+    }
+}
+
 const A = [38, 27, 43, 3, 9, 82, 10];
 merge_sort(A, 0, A.length);
 console.log(A);

@@ -16,3 +16,5 @@ function bubbleSort(array) {
 }
 bubbleSort(arr1);
 console.log(arr1);
+
+// 复杂度O(n^2)
