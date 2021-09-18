@@ -7,7 +7,7 @@ function insert(A, i ,x) {
     }
     A[p + 1] = x;
 }
-function insertion_sort(A) {
+export function insertion_sort(A) {
     for (let i = 1; i < A.length; i++) { // 主循环 N - 1次
         insert(A, i, A[i]); // 决定性时间
         console.log(JSON.stringify(A));
