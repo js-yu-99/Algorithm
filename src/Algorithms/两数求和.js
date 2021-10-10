@@ -12,7 +12,8 @@ function twoSum(nums, target) {
         if (diffs.size === 0) {
             diffs.set(nums[i], i);
         } else {
-            if (diffs.get(target - nums[i])) {
+            const _val = diffs.get(target - nums[i]);
+            if (typeof _val === 'number' &&  _val >= 0) {
                 return [diffs.get(target - nums[i]), i];
             } else {
                 diffs.set(nums[i], i);
@@ -20,4 +21,6 @@ function twoSum(nums, target) {
         }
     }
 }
+
 console.log(twoSum([2, 11, 12, 15], 26));
+console.log(twoSum([2, 7, 11, 15], 9));
